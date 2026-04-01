@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayurdawa | Since 1855</title>
+<meta name="description" content="Ayurdawa - Authentic Ayurvedic medicines since 1855. Trusted herbal pharmacy and clinical care in Kerala.">
+
+<meta name="keywords" content="Ayurdawa, Ayurvedic medicine Kerala, herbal pharmacy, Unani treatment, Ayurdawa India">
+
+<meta name="author" content="Ayurdawa">
+
+<meta property="og:title" content="Ayurdawa Official Website">
+<meta property="og:description" content="Traditional medicine with modern precision.">
+<meta property="og:image" content="logo.ayurdawa.png">
+<meta property="og:type" content="website">
     <link rel="icon" type="image/png" href="logo.ayurdawa.png">
 <link rel="icon" type="image/png" sizes="32x32" href="logo.ayurdawa.png">
 <link rel="icon" type="image/png" sizes="16x16" href="logo.ayurdawa.png">
@@ -191,7 +201,7 @@
     <header class="fixed w-full z-50 px-4 md:px-8 py-6">
         <nav class="max-w-7xl mx-auto glass-nav rounded-[2rem] px-6 md:px-10 h-20 flex justify-between items-center">
             <div class="flex items-center gap-5 cursor-pointer group" onclick="splash(event); showPage('home')">
-                <div class="relative w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-1.5 overflow-hidden">
+                                          <div class="relative w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-1.5 overflow-hidden">
                     <img src="logo.ayurdawa.png" alt="Ayurdawa" class="w-full h-full object-contain" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3034/3034505.png'">
                 </div>
                 <div class="flex flex-col border-l border-slate-200 pl-5">
@@ -553,51 +563,44 @@
                         <p class="text-white/60 text-sm mb-10 leading-relaxed">For hospital supplies, or clinical appointments, please reach out via our official channels above.</p>
 <form action="https://formsubmit.co/ayurdawa@gmail.com" method="POST" class="space-y-6 text-left">
 
-    <!-- Disable captcha -->
+    <!-- REQUIRED SETTINGS -->
     <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_subject" value="New Ayurdawa Enquiry">
+    <input type="hidden" name="_autoresponse" value="Thank you for contacting Ayurdawa. We will reach you soon.">
 
-    <!-- Optional: redirect after submit -->
-    <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html">
+    <!-- TEMP REDIRECT (IMPORTANT: change later) -->
+    <input type="hidden" name="_next" value="https://ayurdawa-yst.vercel.app">
 
     <!-- Name -->
     <div>
         <label class="text-white/70 text-xs uppercase tracking-widest">Name</label>
-        <input type="text" name="name" required 
-        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
-        placeholder="Enter your name">
+        <input type="text" name="name" required class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white">
     </div>
 
     <!-- Purpose -->
     <div>
         <label class="text-white/70 text-xs uppercase tracking-widest">Purpose</label>
-        <input type="text" name="purpose" required 
-        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
-        placeholder="Hospital supply / Consultation / Business">
+        <input type="text" name="purpose" required class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white">
     </div>
 
-    <!-- Contact Number -->
+    <!-- Phone -->
     <div>
         <label class="text-white/70 text-xs uppercase tracking-widest">Contact Number</label>
-        <input type="tel" name="phone" required 
-        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
-        placeholder="+91 XXXXX XXXXX">
+        <input type="tel" name="phone" required class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white">
     </div>
 
     <!-- Location -->
     <div>
         <label class="text-white/70 text-xs uppercase tracking-widest">Location</label>
-        <input type="text" name="location" required 
-        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
-        placeholder="City / District">
+        <input type="text" name="location" required class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white">
     </div>
 
-    <!-- Submit Button -->
-    <button type="submit" 
-    class="w-full bg-[#f2e44d] text-[#0a4d29] py-5 rounded-full font-bold uppercase tracking-widest text-[11px] hover:scale-105 transition-all shadow-lg">
+    <button type="submit" class="w-full bg-[#f2e44d] text-[#0a4d29] py-5 rounded-full font-bold uppercase tracking-widest">
         Send Enquiry
     </button>
 
-</form>                    </div>
+</form>                 </div>
                 </section>
             `
         };
