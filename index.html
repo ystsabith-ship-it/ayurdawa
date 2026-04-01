@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayurdawa | Since 1855</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        :root {
+            --primary: #0a4d29;
+            --accent: #f2e44d;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
+
+        body {  
+            font-family: 'Inter', sans-serif;  
+            background: #fafaf9;
+            color: #1e293b;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .serif { font-family: 'Cormorant Garamond', serif;}
+
+        .bg-mesh {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: 
+        linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+        url(bg.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(10, 77, 41, 0.05);
+        }
+
+        /* Enhanced Vision Cards */
+        .vision-card {
+            background: white;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .vision-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(10, 77, 41, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .vision-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(10, 77, 41, 0.2);
+            box-shadow: 0 30px 60px -12px rgba(10, 77, 41, 0.12);
+        }
+
+        .vision-card:hover::before { opacity: 1; }
+
+        .vision-card i {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .vision-card:hover i {
+            transform: scale(1.2) rotate(-5deg);
+            color: #1a7a44;
+        }
+
+        .member-photo {
+            aspect-ratio: 3/4;
+            border-radius: 2rem;
+            overflow: hidden;
+            background: #f1f5f9;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.5s ease;
+        }
+
+        .member-card:hover .member-photo {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(10, 77, 41, 0.1);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #0a4d29 0%, #1e293b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-transition { animation: slideUp 0.6s ease-out forwards; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: var(--primary); font-weight: 800; }
+
+        /* Splash Screen Elements */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background: #fafaf9;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .splash-logo-container {
+            text-align: center;
+            animation: logoPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(10, 77, 41, 0)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 10px 20px rgba(10, 77, 41, 0.1)); }
+        }
+
+        /* Herbal Splash Effect */
+        .leaf-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+            animation: burst 1s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(var(--s)) rotate(var(--tr)); opacity: 0; }
+        }
+
+        /* Detail Page Styling */
+        .detail-hero {
+            height: 50vh;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 4rem;
+        }
+    </style>
+</head>
+<body class="overflow-hidden"> <!-- Prevent scroll during splash -->
+    
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="splash-logo-container relative">
+            <div class="w-32 h-32 md:w-48 md:h-48 bg-white rounded-[2rem] shadow-2xl flex items-center justify-center p-6 mb-6">
+                <img src="logo.ayurdawa.png" alt="Ayurdawa" class="w-full h-full object-contain" id="splash-logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3034/3034505.png'">
+            </div>
+            <img src="font.ayurdawa.png" alt="Ayurdawa" class="h-8 md:h-10 mx-auto brightness-0 opacity-0 animate-[fadeIn_1s_ease_forwards_0.5s]">
+            <p class="text-[10px] uppercase tracking-[0.6em] font-black text-[#0a4d29]/40 mt-4 opacity-0 animate-[fadeIn_1s_ease_forwards_0.8s]">pharmaceuticals</p>
+        </div>
+    </div>
+
+    <div class="bg-mesh"></div>
+
+    <header class="fixed w-full z-50 px-4 md:px-8 py-6">
+        <nav class="max-w-7xl mx-auto glass-nav rounded-[2rem] px-6 md:px-10 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-5 cursor-pointer group" onclick="splash(event); showPage('home')">
+                <div class="relative w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center p-1.5 overflow-hidden">
+                    <img src="logo.ayurdawa.png" alt="Ayurdawa" class="w-full h-full object-contain" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3034/3034505.png'">
+                </div>
+                <div class="flex flex-col border-l border-slate-200 pl-5">
+                    <img src="font.ayurdawa.png" alt="Ayurdawa" class="h-6 md:h-7 object-contain brightness-0" style="filter: contrast(1.2);">
+                    <p class="text-[8px] md:text-[9px] uppercase tracking-[0.4em] font-black text-[#0a4d29]/60 leading-none mt-1.5">pharmaceuticals</p>
+                </div>
+            </div>
+            
+            <div class="hidden lg:flex gap-12 items-center">
+                <div class="flex gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    <button onclick="showPage('home')" class="nav-link" id="link-home">Home</button>
+                    <button onclick="showPage('history')" class="nav-link" id="link-history">Heritage</button>
+                    <button onclick="showPage('team')" class="nav-link" id="link-team">Our Team</button>
+                    <button onclick="showPage('contact')" class="nav-link" id="link-contact">Contact</button>
+                </div>
+                <button onclick="showPage('contact')" class="bg-[#0a4d29] text-white text-[11px] font-bold uppercase tracking-widest px-8 py-3.5 rounded-full hover:bg-slate-900 transition-all active:scale-95">
+                    Enquire
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app" class="pt-40">
+        <!-- Content Injected via JS -->
+    </main>
+
+    <footer class="bg-[#051c0f] text-white pt-32 pb-12 mt-20 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#f2e44d]/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="grid lg:grid-cols-4 gap-16 mb-24">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1.5">
+                            <img src="logo.ayurdawa.png" class="w-full h-full object-contain" />
+                        </div>
+                        <span class="serif text-3xl font-black tracking-tight">Ayurdawa</span>
+                    </div>
+                    <p class="text-slate-400 max-w-sm leading-relaxed mb-8">
+                        Since 1855, preserving the sanctity of traditional medicine through scientific innovation and family clinical heritage.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-[10px] uppercase tracking-[0.4em] font-black mb-8 text-[#f2e44d]">The Units</h4>
+                    <ul class="space-y-4 text-slate-300 text-sm">
+                        <li><button onclick="showDetail('factory')" class="hover:text-white transition-colors">Ayurdawa</button></li>
+                        <li><button onclick="showDetail('pharma')" class="hover:text-white transition-colors">Amurtha</button></li>
+                        <li><button onclick="showDetail('clinic')" class="hover:text-white transition-colors">Ayurdawa Unani</button></li>
+                        <li><button onclick="showDetail('logistics')" class="hover:text-white transition-colors">Ayurcom</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[10px] uppercase tracking-[0.4em] font-black mb-8 text-[#f2e44d]">Headquarters</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Ayurdawa Corporate Tower<br>
+                        Traditional Medical Zone<br>
+                        Malappuram, Kerala, India
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-12 text-center">
+                <p class="text-[10px] text-slate-500 uppercase tracking-[0.5em]">
+                    &copy; 2024 Ayurdawa . Professional Medical Excellence.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const ANIMATION = {
+    logoDuration: 1800,      // how long logo stays
+    burstDuration: 1000,     // how long particles play
+    burstSpreadDelay: 120,   // delay between bursts
+    fadeDuration: 700       // page fade-in
+};
+        // Data for Pillar Details
+        const pillarDetails = {
+            factory: {
+                title: "Ayurdawa",
+                subtitle: "Advanced Pharmaceutical Production",
+                icon: "fa-industry",
+                photo: "factory.jpg",
+                desc: "Our state-of-the-art manufacturing facility bridges the gap between ancient alchemy and modern pharmaceutical science. Operating under strict WHO-GMP certifications, we ensure that every extract maintains its vital potency while meeting global purity standards."
+            },
+            pharma: {
+                title: "Amurtha",
+                subtitle: "Direct Community Access",
+                icon: "fa-house-medical",
+                photo: "pharmacy.jpg",
+                desc: "Our retail network serves as the frontline of healthcare, providing verified authentic medications and professional counseling. Each hub is staffed by certified pharmacists trained in the Ayurdawa heritage of holistic wellness."
+            },
+            clinic: {
+                title: "Ayurdawa Unani",
+                subtitle: "Personalized Patient Care",
+                icon: "fa-microscope",
+                photo: "clinic.png",
+                desc: "The heart of our clinical practice where generations of knowledge meet clinical diagnosis. Led by our Medical Board, the clinic offers specialized treatments tailored to the unique constitution of every individual."
+            },
+            logistics: {
+                title: "Ayurcom",
+                subtitle: "Global Supply Integrity",
+                icon: "fa-truck-fast",
+                photo: "logistics.jpg",
+                desc: "Our precision logistics wing ensures the cold-chain integrity and rapid delivery of life-saving medications. Utilizing AI-driven tracking and optimized routes, we manage the flow from factory to patient with unmatched transparency."
+            }
+        };
+
+        const pages = {
+            home: `
+                <section class="page-transition max-w-7xl mx-auto px-8">
+                    <div class="text-center mb-24">
+
+    <span class="inline-block bg-gradient-to-r from-[#0a4d29] to-[#1a7a44] text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-6 shadow-sm">
+    Since 1855
+</span>
+
+    <h1 class="serif text-7xl md:text-8xl font-black leading-tight mb-6">
+        Ancestral Wisdom.<br>
+        <span class="italic text-[#0a4d29]">Clinical Precision.</span>
+    </h1>
+
+    <p class="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+        Crafting authentic Ayurvedic medicines since 1855, guided by tradition and refined by modern pharmaceutical standards.
+    </p>
+
+    <p class="mt-6 text-[11px] uppercase tracking-[0.4em] font-black text-[#0a4d29]/60">
+        Authentic. Certified. Trusted.
+    </p>
+</div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div onclick="showDetail('factory')" class="vision-card relative p-10 rounded-[3rem] overflow-hidden group text-white">
+
+                         <!-- Background Image -->
+                          <img src="factory.jpg" 
+                               class="absolute inset-0 w-full h-full object-cover blur-sm scale-95 group-hover:scale-110 transition duration-700">
+                          <!-- Dark Overlay -->
+                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition"></div>
+
+                         <!-- Content -->
+                      <div class="relative z-10">
+                            <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center mb-10">
+                             <i class="fa-solid fa-industry text-3xl text-white"></i>
+                        </div>
+
+                              <h3 class="serif text-2xl font-bold mb-4 text-white">Ayurdawa</h3>
+
+                             <p class="text-sm text-white/80 leading-relaxed">
+                               Where ancestral formulas meet modern GMP standards.
+                            </p>
+
+                            <div class="mt-8 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                             <span>Explore Unit</span> 
+                              <i class="fa-solid fa-arrow-right"></i>
+                             </div>
+                        </div>
+
+                    </div>
+
+                    <div onclick="showDetail('pharma')" class="vision-card relative p-10 rounded-[3rem] overflow-hidden group text-white">
+
+     <!-- Background Image -->
+    <img src="pharmacy.jpg" 
+         class="absolute inset-0 w-full h-full object-cover scale-110 transition duration-700 group-hover:scale-125">
+
+    <!-- Blur + Dark Overlay -->
+    <div class="absolute inset-0 backdrop-blur-sm bg-black/40 group-hover:bg-black/50 transition"></div>
+
+    <!-- Content -->
+    <div class="relative z-10">
+        <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center mb-10">
+            <i class="fa-solid fa-house-medical text-3xl text-white"></i>
+        </div>
+
+        <h3 class="serif text-2xl font-bold mb-4 text-white">Amurtha</h3>
+
+        <p class="text-sm text-white/80 leading-relaxed">
+            Our retail nodes providing direct community access.
+        </p>
+
+        <div class="mt-8 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+            <span>Explore Unit</span> 
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+    </div>
+
+</div>
+                        <div onclick="showDetail('clinic')" class="vision-card relative p-10 rounded-[3rem] border border-slate-100 shadow-sm group overflow-hidden">
+
+    <!-- Background Image -->
+    <img src="clinic.png" 
+         class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 backdrop-blur-sm bg-black/40 group-hover:bg-black/50 transition"></div>
+
+    <!-- Content -->
+    <div class="relative z-10">
+
+        <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center mb-10">
+            <i class="fa-solid fa-microscope text-3xl text-white"></i>
+        </div>
+
+        <h3 class="serif text-2xl font-bold mb-4 text-white">Ayurdawa Unani</h3>
+
+        <p class="text-sm text-white/80 leading-relaxed">
+            Personalized care directed by our medical board.
+        </p>
+
+        <div class="mt-8 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+            <span>Explore Unit</span> 
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+    </div>
+
+</div>
+                      <div onclick="showDetail('logistics')" class="vision-card relative p-10 rounded-[3rem] border border-slate-100 shadow-sm group overflow-hidden">
+
+    <!-- Background Image -->
+    <img src="logistics.jpg" 
+         class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
+
+    <!-- Blur + Overlay -->
+    <div class="absolute inset-0 backdrop-blur-sm bg-black/40 group-hover:bg-black/50 transition"></div>
+
+    <!-- Content -->
+    <div class="relative z-10">
+
+        <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center mb-10">
+            <i class="fa-solid fa-truck-fast text-3xl text-white"></i>
+        </div>
+
+        <h3 class="serif text-2xl font-bold mb-4 text-white">Ayurcom</h3>
+
+        <p class="text-sm text-white/80 leading-relaxed">
+            Precision supply chain management across all units.
+        </p>
+
+        <div class="mt-8 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+            <span>Explore Unit</span> 
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+    </div>
+
+</div>
+                    </div>
+                </section>
+            `,
+            history: `
+                <section class="page-transition max-w-7xl mx-auto px-8 py-12">
+                    <div class="text-center mb-20">
+                        <h1 class="serif text-6xl font-black mb-4 text-gradient">A Sacred <span class="italic">Heritage</span></h1>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs">Unbroken Legacy Since 1855</p>
+                    </div>
+                    <div class="max-w-4xl mx-auto mb-32">
+                        <div class="bg-white rounded-[4rem] p-12 md:p-16 flex flex-col md:flex-row items-center gap-16 shadow-xl border border-slate-50 relative overflow-hidden">
+                            <div class="w-full md:w-1/2 member-photo shadow-2xl relative z-10">
+                                <img src="yoosuf vaidyar.jpeg" alt="Yoosuf Vaidyar" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-slate-300 bg-slate-50\'><i class=\'fa-solid fa-user-tie text-9xl\'></i></div>'">
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <span class="text-[#0a4d29] font-black uppercase tracking-[0.3em] text-[10px] mb-4 block">The Founding Architect</span>
+                                <h2 class="serif text-5xl font-black mb-6">Yoosuf <br><span class="italic text-[#0a4d29]">Vaidyar</span></h2>
+                                <p class="text-slate-500 leading-relaxed mb-8 italic text-lg">"Health is the true wealth bequeathed by our ancestors."</p>
+                                <p class="text-slate-400 text-sm leading-relaxed">Our beloved grandparent and the original visionary who formalized the Ayurdawa name, establishing the ethical foundation for the five units we operate today.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            team: `
+                <section class="page-transition max-w-7xl mx-auto px-8 py-12">
+                    <div class="text-center mb-20">
+                        <h1 class="serif text-6xl font-black mb-6 leading-tight text-gradient">Our <span class="italic">Executive</span> Board</h1>
+                        <p class="text-slate-500 max-w-xl mx-auto uppercase tracking-widest text-[10px] font-bold">Six Pillars of Ayurdawa Excellence</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-6xl mx-auto">
+                        <div class="text-center member-card group">
+                            <div class="member-photo mb-6"><img src="md.jpeg" class="w-full h-full object-cover grayscale group-hover:grayscale-0" /></div>
+                            <h3 class="serif text-2xl font-bold">Managing Director</h3>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-widest text-[10px] mt-2">Alavi Haji Tharammal</p>
+                        </div>
+                        <div class="text-center member-card group">
+                            <div class="member-photo mb-6"><img src="ed.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0" /></div>
+                            <h3 class="serif text-2xl font-bold">Executive Director</h3>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-widest text-[10px] mt-2">Ashraf Tharammal</p>
+                        </div>
+                        <div class="text-center member-card group">
+                            <div class="member-photo mb-6"><img src="saeeda.jpeg" class="w-full h-full object-cover grayscale group-hover:grayscale-0" /></div>
+                            <h3 class="serif text-2xl font-bold">Medical Director</h3>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-widest text-[10px] mt-2">Dr.Saeeda</p>
+                        </div>
+                        <div class="text-center member-card group">
+                            <div class="member-photo mb-6"><img src="ayisha sidra.jpeg" class="w-full h-full object-cover grayscale group-hover:grayscale-0" /></div>
+                            <h3 class="serif text-2xl font-bold">Associate Practitioner</h3>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-widest text-[10px] mt-2">Dr.Ayisha Sidra</p>
+                        </div>
+                        <div class="text-center member-card group">
+                            <div class="member-photo mb-6"><img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover grayscale group-hover:grayscale-0" /></div>
+                            <h3 class="serif text-2xl font-bold">Chief Accountant</h3>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-widest text-[10px] mt-2">Musthafa</p>
+                        </div>
+                        <div class="text-center member-card group">
+                            <div class="member-photo mb-6"><img src="external affairs.jpeg" class="w-full h-full object-cover grayscale group-hover:grayscale-0" /></div>
+                            <h3 class="serif text-2xl font-bold">External Affairs</h3>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-widest text-[10px] mt-2">Yoosuf Sabith</p>
+                        </div>
+                    </div>
+                </section>`,
+            contact: `
+                <section class="page-transition max-w-7xl mx-auto px-8 py-12 text-center">
+                    <h1 class="serif text-6xl font-black mb-8 text-gradient">Let's <span class="italic">Connect.</span></h1>
+                    <p class="text-slate-500 mb-12"> Enquiries for all units.</p>
+                    
+                    <div class="max-w-4xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- WhatsApp -->
+                        <a href="https://wa.me/918086711911" target="_blank" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 hover:border-[#0a4d29]/20 hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-green-50 text-[#25D366] rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                            </div>
+                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">WhatsApp</p>
+                            <p class="text-sm font-bold text-slate-800">+91 80867 11911</p>
+                        </a>
+
+                        <!-- Email -->
+                        <a href="mailto:ayurdawa@gmail.com" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 hover:border-[#0a4d29]/20 hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-envelope text-xl"></i>
+                            </div>
+                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">Email Us</p>
+                            <p class="text-sm font-bold text-slate-800">ayurdawa@gmail.com</p>
+                        </a>
+
+                        <!-- Call -->
+                        <a href="tel:+918086711911" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 hover:border-[#0a4d29]/20 hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-[#0a4d29]/5 text-[#0a4d29] rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-phone text-xl"></i>
+                            </div>
+                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">Call Office</p>
+                            <p class="text-sm font-bold text-slate-800">+91 80867 11911</p>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/ayur_dawa?igsh=MWp5djJoZTFpY3E0bA==" target="_blank" class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-50 hover:border-[#0a4d29]/20 hover:shadow-xl transition-all group">
+                            <div class="w-12 h-12 bg-pink-50 text-[#E1306C] rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-instagram text-2xl"></i>
+                            </div>
+                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">Instagram</p>
+                            <p class="text-sm font-bold text-slate-800">@ayurdawa</p>
+                        </a>
+                    </div>
+
+                    <div class="mt-16 max-w-xl mx-auto bg-[#0a4d29] p-12 rounded-[4rem] shadow-2xl text-white">
+                        <h3 class="serif text-3xl mb-4 italic">Direct Enquiries</h3>
+                        <p class="text-white/60 text-sm mb-10 leading-relaxed">For hospital supplies, or clinical appointments, please reach out via our official channels above.</p>
+<form action="https://formsubmit.co/ayurdawa@gmail.com" method="POST" class="space-y-6 text-left">
+
+    <!-- Disable captcha -->
+    <input type="hidden" name="_captcha" value="false">
+
+    <!-- Optional: redirect after submit -->
+    <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html">
+
+    <!-- Name -->
+    <div>
+        <label class="text-white/70 text-xs uppercase tracking-widest">Name</label>
+        <input type="text" name="name" required 
+        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
+        placeholder="Enter your name">
+    </div>
+
+    <!-- Purpose -->
+    <div>
+        <label class="text-white/70 text-xs uppercase tracking-widest">Purpose</label>
+        <input type="text" name="purpose" required 
+        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
+        placeholder="Hospital supply / Consultation / Business">
+    </div>
+
+    <!-- Contact Number -->
+    <div>
+        <label class="text-white/70 text-xs uppercase tracking-widest">Contact Number</label>
+        <input type="tel" name="phone" required 
+        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
+        placeholder="+91 XXXXX XXXXX">
+    </div>
+
+    <!-- Location -->
+    <div>
+        <label class="text-white/70 text-xs uppercase tracking-widest">Location</label>
+        <input type="text" name="location" required 
+        class="w-full mt-2 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#f2e44d]" 
+        placeholder="City / District">
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" 
+    class="w-full bg-[#f2e44d] text-[#0a4d29] py-5 rounded-full font-bold uppercase tracking-widest text-[11px] hover:scale-105 transition-all shadow-lg">
+        Send Enquiry
+    </button>
+
+</form>                    </div>
+                </section>
+            `
+        };
+
+        // Splash Sequence Logic
+        function startSplashSequence() {
+    const logo = document.getElementById('splash-logo-img');
+    const splashScreen = document.getElementById('splash-screen');
+
+    setTimeout(() => {
+        const rect = logo.getBoundingClientRect();
+
+        // Multi burst using config
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => {
+                triggerHerbalBurst(
+                    window.innerWidth * Math.random(),
+                    window.innerHeight * Math.random(),
+                    15
+                );
+            }, i * ANIMATION.burstSpreadDelay);
+        }
+
+        // Exit splash using config
+        setTimeout(() => {
+            splashScreen.style.opacity = '0';
+            document.body.classList.remove('overflow-hidden');
+
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, ANIMATION.fadeDuration);
+
+        }, ANIMATION.burstDuration);
+
+    }, ANIMATION.logoDuration);
+}
+
+       function triggerHerbalBurst(x, y, count) {
+    const colors = ['#0a4d29', '#1a7a44', '#f2e44d', '#4ade80', '#eab308'];
+    const icons = [
+        'fa-leaf','fa-seedling','fa-mortar-pestle',
+        'fa-flask','fa-vial','fa-capsules',
+        'fa-prescription-bottle','fa-microscope'
+    ];
+
+    for (let i = 0; i < count; i++) {
+        const particle = document.createElement('i');
+        particle.className = `fa-solid ${icons[Math.floor(Math.random() * icons.length)]} leaf-particle`;
+        particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.fontSize = Math.random() * 20 + 12 + 'px';
+
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * 600 + 100;
+
+        particle.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        particle.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        particle.style.setProperty('--tr', Math.random() * 360 + 'deg');
+        particle.style.setProperty('--s', Math.random() * 1.5 + 0.8);
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 1200);
+    }
+        }
+
+        function splash(e) {
+            triggerHerbalBurst(e.clientX, e.clientY, 8);
+        }
+
+        function showDetail(id) {
+            const data = pillarDetails[id];
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <section class="page-transition max-w-7xl mx-auto px-8 pb-32">
+                    <button onclick="showPage('home')" class="group flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-[#0a4d29] mb-12">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to Core Units
+                    </button>
+                    <div class="grid lg:grid-cols-2 gap-16 items-center">
+                        <div>
+                            <div class="w-16 h-16 bg-[#0a4d29] text-white rounded-2xl flex items-center justify-center mb-8">
+                                <i class="fa-solid ${data.icon} text-2xl"></i>
+                            </div>
+                            <h1 class="serif text-7xl font-black text-gradient mb-4">${data.title}</h1>
+                            <p class="text-[#0a4d29] font-black uppercase tracking-[0.4em] text-[10px] mb-10">${data.subtitle}</p>
+                            <p class="text-slate-500 text-xl leading-relaxed font-light">${data.desc}</p>
+                            <div class="mt-12 h-px bg-slate-200 w-24"></div>
+                        </div>
+                        <div class="relative">
+                            <div class="rounded-[4rem] overflow-hidden shadow-2xl h-[600px] border-[12px] border-white">
+                                <img src="${data.photo}" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="absolute -bottom-8 -left-8 bg-[#f2e44d] p-10 rounded-[3rem] shadow-xl max-w-xs">
+                                <p class="serif text-xl font-bold italic">"Excellence is not an act, but a habit preserved through generations."</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function showPage(pageId) {
+            const app = document.getElementById('app');
+            app.innerHTML = pages[pageId] || pages.home;
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.id === `link-${pageId}`) link.classList.add('active');
+            });
+        }
+
+        window.onload = () => {
+            showPage('home');
+            startSplashSequence();
+        };
+    </script>
+</body>
+</html>
